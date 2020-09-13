@@ -13,37 +13,8 @@ public class PlayfairCipher {
 	
 	public static void main(String[] args) {
 		Scanner input = new Scanner(System.in);
-		System.out.print("Choose (E)ncryption or (D)ecryption: ");
-		String choice = input.next();
-		boolean valid = false;
-		while(!valid){
-			if(choice.toUpperCase().startsWith("E")) {
-				System.out.print("Enter your text: ");
-				String plainText = input.next();
-
-				System.out.print("Enter your key: ");
-				String key = input.next();
-
-				valid = true;
-
-				plainText = plainText.toUpperCase();
-				key = key.toUpperCase();
-			}else if(choice.toUpperCase().startsWith("D")) {
-				System.out.print("Enter your text: ");
-				String cipherText = input.next();
-
-				System.out.print("Enter your key: ");
-				String key = input.next();
-
-				valid = true;
-
-				cipherText = cipherText.toUpperCase();
-				key = key.toUpperCase();
-			}else {
-				System.out.println("Choose (E) or (D): ");
-				choice = input.next();
-			}
-		}
+		System.out.println("Enter your key: ");
+		String key = input.next();
 
 		// populate tableau
 		HashMap<String, Letter> alphabet = populateTableau();
@@ -53,13 +24,27 @@ public class PlayfairCipher {
 		map(tableau, alphabet);
 		printTableau(tableau);
 
+		System.out.print("Choose (E)ncryption or (D)ecryption: ");
+		String choice = input.next();
 		String result = "";
-		if(choice.equals("E")) {
-			result = encrypt(tableau, plainText, alphabet);
-			System.out.println("Encryption: " + result);
-		}else {
-			result = decrypt(tableau, cipherText, alphabet);
-			System.out.println("Decryption: " + result);
+		boolean valid = false;
+		while(!valid) {
+			if(choice.toUpperCase().startsWith("E")) {
+				System.out.println("Enter your plaintext for encryption: ");
+				String plainText = input.next();
+				valid = true;
+				result = encrypt(tableau, plainText, alphabet);
+				System.out.println("Encryption: " + result);
+			}else if(choice.toUpperCase().startsWith("D")) {
+				System.out.println("Enter your ciphertext for decryption: ");
+				String cipherText = input.next();
+				valid = true;
+				result = decrypt(tableau, cipherText, alphabet);
+				System.out.println("Decryption: " + result);
+			}else {
+				System.out.println("Enter your choice, (E) or (D): ");
+				choice = input.next();
+			}
 		}
 	}
 
@@ -156,7 +141,54 @@ public class PlayfairCipher {
 			int y1 = (int) ((letters.get(letter1).getPoint().getY()));
 			int y2 = (int) ((letters.get(letter2).getPoint().getY()));
 
-			// Check 
+			// Check if letters are on the same row, if so, shift
+			if(x1 == x2) {
+				y1 = (y1 + 1) % 5;
+				y2 = (y2 + 1) % 5;
+				cipherText.append(tableau[x1][y1]);
+				cipherText.append(tableau[x2][y2]);
+			}else if(y1 == y2) { // Check if letters are on the same COLUMN, if so, shift
+				x1 = (x1 + 1) % 5;
+				x2 = (x2 + 1) % 5;
+				cipherText.append(tableau[x1][y1]);
+				cipherText.append(tableau[x2][y2]);
+			}else { // swap the y values of the two letters and return the new letter
+				cipherText.append(tableau[x1][y2]);
+				cipherText.append(tableau[x2][y1]);
+			}
 		}
+		return cipherText.toString();
+	}
+
+	private static String decrypt(String[][] tableau, String cipherText, HashMap<String, Letter> letters) {
+		StringBuilder plainText = new StringBuilder();
+
+		for(int i = 0; i < cipherText.length(); i += 2) {
+			String letter1 = cipherText.substring(i, i + 1);
+			String letter2 = cipherText.substring(i + 1, i + 2);
+
+			// identify the x and y coords for the pair
+			int x1 = (int) ((letters.get(letter1).getPoint().getX()));
+			int x2 = (int) ((letters.get(letter2).getPoint().getX()));
+			int y1 = (int) ((letters.get(letter1).getPoint().getY()));
+			int y2 = (int) ((letters.get(letter2).getPoint().getY()));
+
+			// if letters are on the same row, shift
+			if(x1 == x2) {
+				y1 = (y1 + 4) % 5;
+				y2 = (y2 + 4) % 5;
+				plainText.append(tableau[x1][y1]);
+				plainText.append(tableau[x2][y2]);
+			}else if(y1 == y2) { // if letters are on the same column, shift
+				x1 = (x1 + 4) % 5;
+				x2 = (x2 + 4) % 5;
+				plainText.append(tableau[x1][y1]);
+				plainText.append(tableau[x2][y2]);
+			}else { // otherwise, swap the y values of the two letters
+				plainText.append(tableau[x1][y2]);
+				plainText.append(tableau[x2][y1]);
+			}
+		}
+		return plainText.toString();
 	}
 }
