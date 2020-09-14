@@ -14,7 +14,7 @@ import java.nio.file.Paths;
 
 public class PlayfairCipher {
 	public static final String ALPHABET[] = {"A","B","C","D","E","F","G","H",
-											"I","K","L","M","N","O","P","Q","R",
+											"J","K","L","M","N","O","P","Q","R",
 											"S","T","U","V","W","X","Y","Z"};
 	
 	public static void main(String[] args) {
