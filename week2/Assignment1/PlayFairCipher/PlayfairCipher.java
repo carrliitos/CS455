@@ -1,3 +1,9 @@
+/* @author Benzon Carlitos Salazar
+*	CS455 - Assignment 1, Part 2: Playfair Cipher
+*	This program will either encrypt or decrypt plain/ciphertexts, for a given
+*	key.
+*/
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -14,7 +20,7 @@ public class PlayfairCipher {
 	public static void main(String[] args) {
 		Scanner input = new Scanner(System.in);
 		System.out.println("Enter your key: ");
-		String key = input.next();
+		String key = input.next().toUpperCase();
 
 		// populate tableau
 		HashMap<String, Letter> alphabet = populateTableau();
@@ -31,16 +37,18 @@ public class PlayfairCipher {
 		while(!valid) {
 			if(choice.toUpperCase().startsWith("E")) {
 				System.out.println("Enter your plaintext for encryption: ");
-				String plainText = input.next();
+				String plainText = input.next().toUpperCase();
 				valid = true;
 				result = encrypt(tableau, plainText, alphabet);
-				System.out.println("Encryption: " + result);
+				System.out.println("\nEncryption Result: " + result);
+				printTableau(tableau);
 			}else if(choice.toUpperCase().startsWith("D")) {
 				System.out.println("Enter your ciphertext for decryption: ");
-				String cipherText = input.next();
+				String cipherText = input.next().toUpperCase();
 				valid = true;
 				result = decrypt(tableau, cipherText, alphabet);
-				System.out.println("Decryption: " + result);
+				System.out.println("\nDecryption Result: " + result);
+				printTableau(tableau);
 			}else {
 				System.out.println("Enter your choice, (E) or (D): ");
 				choice = input.next();

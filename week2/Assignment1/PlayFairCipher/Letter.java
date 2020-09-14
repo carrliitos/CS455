@@ -1,4 +1,5 @@
 /* @author Benzon Carlitos Salazar
+*	CS455 - Assignment 1, Part 2: Playfair Cipher
 *	This program will contain getters and setters used for accessing each letter
 *	in the alphabet, key, and/or the plaintext
 */
