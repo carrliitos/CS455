@@ -1,0 +1,26 @@
+Run 1:
+Enter your key:
+PASSWORD
+**PLAYFAIR TABLEAU**
+P A S W O 
+R D B C E 
+F G H I K 
+L M N Q T 
+U V X Y Z 
+Choose (E)ncryption or (D)ecryption: Enter your plaintext for encryption: 
+E
+
+Encryption Result: KBMMPOPEMR
+**PLAYFAIR TABLEAU**
+P A S W O 
+R D B C E 
+F G H I K 
+L M N Q T 
+U V X Y Z 
+
+Run 2:
+Enter your key:
+LIGHTNING
+Exception in thread "main" java.lang.NullPointerException
+	at PlayfairCipher.generateTableau(PlayfairCipher.java:77)
+	at PlayfairCipher.main(PlayfairCipher.java:28)
