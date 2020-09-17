@@ -137,6 +137,8 @@ public class PlayfairCipher {
 	}
 
 	private static String encrypt(String[][] tableau, String plainText, HashMap<String, Letter> letters) {
+		plainText = pair(plainText);
+
 		StringBuilder cipherText = new StringBuilder();
 
 		for(int i = 0; i < plainText.length(); i += 2) { // Remember: pairs
