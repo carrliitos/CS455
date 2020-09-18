@@ -8,7 +8,30 @@
 */
 
 public class MonoalphabeticCipher {
-	// Decode
+	private String cipherText;
+	private int[] letterFrequency;
+	private char[] plainTextMapping;
+	private char[] cipherTextMapping;
+
+	public void Monoalphabetic(String cipherText, int[] frequency) {
+		;
+	}
+
+	// decryption
+	public String decrypt() {
+		String plainText = "";
+		String cipherText = this.cipherText.toUpperCase();
+		for(int i = 0; i < cipherText.length(); i++) {
+			char currentChar = cipherText.charAt(i);
+			int charVal = currentChar - 0x41;
+			if(charVal >= 0 && charVal < 26) {
+				plainText += this.cipherTextMapping[charVal];
+			}else {
+				plainText += currentChar;
+			}
+		}
+		return plainText;
+	}
 
 	// generate a mapping of frequencies, and sort ciphertext frequencies
 
