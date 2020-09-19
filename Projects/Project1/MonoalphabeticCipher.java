@@ -7,56 +7,42 @@
 *		[2] Use the key to decipher the original message as plaintext
 */
 
+import java.util.Scanner;
+import java.util.Arrays;
+import java.io.File;
+import java.io.FileNotFoundException;
+
 public class MonoalphabeticCipher {
-	private String cipherText;
-	private int[] letterFrequency;
-	private char[] plainTextMapping;
-	private char[] cipherTextMapping;
-
-	public void Monoalphabetic(String cipherText, int[] frequency) {
-		;
-	}
-
-	// decryption
-	public String decrypt() {
-		String plainText = "";
-		String cipherText = this.cipherText.toUpperCase();
-		for(int i = 0; i < cipherText.length(); i++) {
-			char currentChar = cipherText.charAt(i);
-			int charVal = currentChar - 0x41;
-			if(charVal >= 0 && charVal < 26) {
-				plainText += this.cipherTextMapping[charVal];
-			}else {
-				plainText += currentChar;
-			}
+	public static void main(String[] args) {
+		try{
+			File file = new File("sample.txt");
+			Scanner scan = new Scanner(file);
+			String fileContent = scan.nextLine().replaceAll("\n", "");
+			print(countCharacters(fileContent));
+		}catch(FileNotFoundException e) {
+			System.out.println("File not found");
 		}
-		return plainText;
 	}
 
-	// generate a mapping of frequencies, and sort ciphertext frequencies
-
-
-	// calculate letter frequency
-	public int[] getCiphertextFrequency() {
-		return calcFrequency(this.cipherText);
-	}
-
-	private int[] calcFrequency(String text) {
-		int charCount = 0;
-		int[] newFrequency = new int[26];
+	public static int[] countCharacters(String text) {
+		// Store count of each character
+		int[] alphabet = new int[26];
 		text = text.toUpperCase();
+		// traverse each character in the string
 		for(int i = 0; i < text.length(); i++) {
-			int currentChar = text.charAt(i);
-			int letterIndex = currentChar - 0x41;
-			if(letterIndex < 0 || letterIndex >= 26) {
-				continue;
+			// if the character is a letter at the current position
+			if(Character.isLetter(text.charAt(i))) {
+				// add to the corresponding place in the array
+				alphabet[Character.getNumericValue(text.charAt(i)) - 10]++;
 			}
-			newFrequency[letterIndex]++;
-			charCount++;
 		}
-		for(int i = 0; i < 26; i++) {
-			newFrequency[i] = (newFrequency[i] * 1000) / charCount;
+		return alphabet;
+	}
+
+	// print the array in a nice "A: ##" format
+	public static void print(int[] data) {
+		for(int i = 0; i < data.length; i++) {
+			System.out.println(((char)(i + 65)) + ": " + data[i]);
 		}
-		return newFrequency;
 	}
 }
