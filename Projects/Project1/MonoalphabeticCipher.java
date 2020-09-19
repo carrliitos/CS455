@@ -15,10 +15,18 @@ import java.io.FileNotFoundException;
 public class MonoalphabeticCipher {
 	public static void main(String[] args) {
 		try{
+			int characters[] = {};
 			File file = new File("sample.txt");
 			Scanner scan = new Scanner(file);
-			String fileContent = scan.nextLine().replaceAll("\n", "");
-			print(countCharacters(fileContent));
+			// String fileContent = scan.nextLine();
+			scan.useDelimiter("[;\r\n]+");
+			while(scan.hasNext()) {
+				// print(countCharacters(fileContent));
+				// print(countCharacters(scan.next()));
+				// System.out.printf("%s%n", scan.next());
+				characters = countCharacters(scan.next());
+			}
+			System.out.println(Arrays.toString(characters));
 		}catch(FileNotFoundException e) {
 			System.out.println("File not found");
 		}
