@@ -9,6 +9,7 @@
 
 import java.util.Scanner;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.io.FileReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -19,16 +20,26 @@ public class Monoalphabetic {
 			FileReader fr = new FileReader("Benzon S.txt");
 			int i;
 			int count = 0;
+			char x = ' ';
+			ArrayList<Character> chars = new ArrayList<>();
 			while((i = fr.read()) != -1) {
 				if(Character.isLetter(i)){
+					x = (char) i;
 					count++;
+					chars.add(x);
 				}
 			}
-			System.out.printf("Total Letters = %d\n", count);
+			System.out.printf("Accessing all element:\n");
+			for(i = 0; i < chars.size(); i++) {
+				System.out.printf("%c", chars.get(i));
+			}
+
+			System.out.printf("\nTotal Letters = %d\n", count);
+			fr.close();
 		}catch(FileNotFoundException e) {
-			System.out.println("File not found");
+			System.out.printf("File not found\n");
 		}catch(IOException i) {
-			System.out.println("IO Exception error");
+			System.out.printf("IO Exception error\n");
 		}
 	}
 }
