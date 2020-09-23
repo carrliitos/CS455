@@ -23,10 +23,11 @@ public class Monoalphabetic {
 			System.out.println(letter + ": " + chars[i]);
 		}
 
-		// double maxChars = 0;
-		// for(int i : chars) {
-		// 	if(i > maxChars) maxChars = i;
-		// }
+		double counter = 0;
+		for(int i : chars) {
+			i++;
+		}
+		System.out.println(i);
 	}
 
 	public static int[] readFile() {
@@ -40,7 +41,9 @@ public class Monoalphabetic {
 				String line = reader.nextLine().toUpperCase();
 				for(int i = 0; i < line.length(); i++) {
 					int letter = (int)(line.charAt(i) - 'A');
-					if(letter > -1 && letter < ret.length) ret[letter]++;
+					if(letter > -1 && letter < ret.length){
+						ret[letter]++;
+					} 
 				}
 			}
 			reader.close();
