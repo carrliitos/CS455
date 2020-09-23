@@ -7,39 +7,47 @@
 *		[2] Use the key to decipher the original message as plaintext
 */
 
-import java.util.Scanner;
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.io.FileReader;
+import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.util.Scanner;
 
 public class Monoalphabetic {
+	public static final String filepath = "./Benzon S.txt";
+
 	public static void main(String[] args) {
-		try{
-			FileReader fr = new FileReader("Benzon S.txt");
-			int i;
-			int count = 0;
-			char x = ' ';
-			ArrayList<Character> chars = new ArrayList<>();
-			while((i = fr.read()) != -1) {
-				if(Character.isLetter(i)){
-					x = (char) i;
-					count++;
-					chars.add(x);
+		int chars[] = readFile();
+		if(chars == null) return;
+
+		for(int i = 0; i < 26; i++) {
+			char letter = (char)('A' + i);
+			System.out.println(letter + ": " + chars[i]);
+		}
+
+		// double maxChars = 0;
+		// for(int i : chars) {
+		// 	if(i > maxChars) maxChars = i;
+		// }
+	}
+
+	public static int[] readFile() {
+		try {
+			File file = new File(filepath);
+			Scanner reader = new Scanner(file, "UTF-8");
+
+			int ret[] = new int[26];
+
+			while(reader.hasNextLine()) {
+				String line = reader.nextLine().toUpperCase();
+				for(int i = 0; i < line.length(); i++) {
+					int letter = (int)(line.charAt(i) - 'A');
+					if(letter > -1 && letter < ret.length) ret[letter]++;
 				}
 			}
-			System.out.printf("Accessing all element:\n");
-			for(i = 0; i < chars.size(); i++) {
-				System.out.printf("%c", chars.get(i));
-			}
-
-			System.out.printf("\nTotal Letters = %d\n", count);
-			fr.close();
+			reader.close();
+			return ret;
 		}catch(FileNotFoundException e) {
-			System.out.printf("File not found\n");
-		}catch(IOException i) {
-			System.out.printf("IO Exception error\n");
+			System.out.println("Cannot find file.");
+			return null;
 		}
 	}
 }
