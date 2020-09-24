@@ -43,7 +43,7 @@ public class Monoalphabetic {
 				}
 				letterCount += line.length();
 			}
-			System.out.println("Total characters = " + letterCount);
+			System.out.printf("Total letters found: %d\n", letterCount);
 			reader.close();
 			return ret;
 		}catch(FileNotFoundException e) {
