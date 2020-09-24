@@ -10,6 +10,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+import java.util.Arrays;
 
 public class Monoalphabetic {
 	public static final String filepath = "./Benzon S.txt";
@@ -22,12 +23,6 @@ public class Monoalphabetic {
 			char letter = (char)('A' + i);
 			System.out.println(letter + ": " + chars[i]);
 		}
-
-		double counter = 0;
-		for(int i : chars) {
-			i++;
-		}
-		System.out.println(i);
 	}
 
 	public static int[] readFile() {
@@ -36,6 +31,7 @@ public class Monoalphabetic {
 			Scanner reader = new Scanner(file, "UTF-8");
 
 			int ret[] = new int[26];
+			int letterCount = 0;
 
 			while(reader.hasNextLine()) {
 				String line = reader.nextLine().toUpperCase();
@@ -45,7 +41,9 @@ public class Monoalphabetic {
 						ret[letter]++;
 					} 
 				}
+				letterCount += line.length();
 			}
+			System.out.println("Total characters = " + letterCount);
 			reader.close();
 			return ret;
 		}catch(FileNotFoundException e) {
