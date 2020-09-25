@@ -2,9 +2,9 @@ import java.util.*;
 
 public class DecryptionTesting {
     public static void main(String [] args) {
-        String ciphertext = "jyyv jy muvyi vay vofm hmivl";
-        String key = "msxnyufaewbkjqohgitvdzrplc";
-        String KEY = "MSXNYUFAEWBKJQOHGITVDZRPLC";
+        String ciphertext = "EHK NDGBKOE XCEKJIKDX KIGGS GL EHK POUDFKE FKEEKD, IT JUEHUJVKF HUMEHGDJK";
+        String key = "xzpsacitwnehgfmlqjvyrodbuk";
+        String KEY = "XZPSACITWNEHGFMLQJVYRODBUK";
         
         String alphabet = "abcdefghijklmnopqrstuvwxyz";
         String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";

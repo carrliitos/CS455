@@ -21,7 +21,7 @@ public class Monoalphabetic {
 
 		for(int i = 0; i < 26; i++) {
 			char letter = (char)('A' + i);
-			System.out.println(letter + ": " + chars[i]);
+			System.out.println(letter + "," + chars[i]);
 		}
 	}
 
@@ -31,7 +31,6 @@ public class Monoalphabetic {
 			Scanner reader = new Scanner(file, "UTF-8");
 
 			int ret[] = new int[26];
-			int letterCount = 0;
 
 			while(reader.hasNextLine()) {
 				String line = reader.nextLine().toUpperCase();
@@ -41,9 +40,7 @@ public class Monoalphabetic {
 						ret[letter]++;
 					}
 				}
-				letterCount += line.length();
 			}
-			System.out.printf("Total letters found: %d\n", letterCount);
 			reader.close();
 			return ret;
 		}catch(FileNotFoundException e) {

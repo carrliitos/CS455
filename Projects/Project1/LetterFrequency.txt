@@ -1,4 +1,3 @@
-Total characters = 502733
 A: 514
 B: 373
 C: 10357
