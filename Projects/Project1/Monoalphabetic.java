@@ -77,7 +77,7 @@ public class Monoalphabetic {
 			FileReader fReader = new FileReader(file);
 			BufferedReader bReader = new BufferedReader(fReader);
 
-			File f = new File("plainText.txt");
+			File f = new File("/plainText.txt");
 			FileWriter fWriter = new FileWriter(f);
 
 			int c = 0;
@@ -90,6 +90,7 @@ public class Monoalphabetic {
 			for(int i = 0; i < chars.size(); i++) {
 				cipherText += chars.get(i);
 			}
+
 			String KEY = "UIOYKLXHVBSFWJGNRDPECZMATQ";
 			String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -101,6 +102,9 @@ public class Monoalphabetic {
 					}
 				}
 			}
+
+			System.out.println("Decryption finished.");
+			System.out.println("Recovered plaintext location: " + f);
 
 			fReader.close();
 			bReader.close();
