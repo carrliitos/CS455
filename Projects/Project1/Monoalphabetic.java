@@ -5,6 +5,8 @@
 *	Two tasks are to be done:
 *		[1] Assist us in retrieving the key used to encrypt the original message
 *		[2] Use the key to decipher the original message as plaintext
+*
+*	The retrieved key: "UIOYKLXHVBSFWJGNRDPECZMATQ"
 */
 
 import java.io.File;
@@ -25,7 +27,7 @@ public class Monoalphabetic {
 		if(chars == null) return;
 
 		try {
-			File f = new File("letterFrequency.txt");
+			File f = new File("./letterFrequency.txt");
 			FileWriter fWriter = new FileWriter(f);
 
 			fWriter.write("LETTER\t| FREQUENCY\n");
@@ -77,7 +79,7 @@ public class Monoalphabetic {
 			FileReader fReader = new FileReader(file);
 			BufferedReader bReader = new BufferedReader(fReader);
 
-			File f = new File("/plainText.txt");
+			File f = new File("./plainText.txt");
 			FileWriter fWriter = new FileWriter(f);
 
 			int c = 0;
