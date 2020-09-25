@@ -23,6 +23,7 @@ public class Monoalphabetic {
 	public static void main(String[] args) {
 		String filepath = "Benzon S.txt";
 
+		System.out.println("Calculating Letter Frequencies...");
 		int chars[] = letterFrequency(filepath);
 		if(chars == null) return;
 
@@ -38,11 +39,17 @@ public class Monoalphabetic {
 			}
 			fWriter.flush();
 			fWriter.close();
+
+			System.out.println("Letter frequency calculation finished.");
+			System.out.println("File location: " + f);
 		}catch(IOException e) {
 			System.out.println("IO Error in main() method.");
 			e.printStackTrace();
 		}
 
+		System.out.println("");
+		System.out.println("Decrypting ciphertext...");
+		System.out.println("Grab some coffee, this may take a while...");
 		decrypt(filepath);
 	}
 
@@ -106,7 +113,7 @@ public class Monoalphabetic {
 			}
 
 			System.out.println("Decryption finished.");
-			System.out.println("Recovered plaintext location: " + f);
+			System.out.println("Recovered plaintext file location: " + f);
 
 			fReader.close();
 			bReader.close();
