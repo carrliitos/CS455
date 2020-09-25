@@ -39,7 +39,7 @@ public class Monoalphabetic {
 					int letter = (int)(line.charAt(i) - 'A');
 					if(letter > -1 && letter < ret.length){
 						ret[letter]++;
-					} 
+					}
 				}
 				letterCount += line.length();
 			}

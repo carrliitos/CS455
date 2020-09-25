@@ -1,0 +1,2072 @@
+IEEE TRANSACTIONS ON KNOWLEDGE AND DATA ENGINEERING
+1
+Calculating the similarity between words and
+sentences using a lexical database and corpus
+statistics
+Atish Pawar, Vijay Mago
+Abstract—Calculating the semantic similarity between sentences is a long dealt problem in the area of natural language processing.
+The semantic analysis field has a crucial role to play in the research related to the text analytics. The semantic similarity differs as the
+domain of operation differs. In this paper, we present a methodology which deals with this issue by incorporating semantic similarity
+and corpus statistics. To calculate the semantic similarity between words and sentences, the proposed method follows an edge-based
+approach using a lexical database. The methodology can be applied in a variety of domains. The methodology has been tested on both
+benchmark standards and mean human similarity dataset. When tested on these two datasets, it gives highest correlation value for
+both word and sentence similarity outperforming other similar models. For word similarity, we obtained Pearson correlation coefficient
+of 0.8753 and for sentence similarity, the correlation obtained is 0.8794.
+Index Terms—Natural Language Processing, Semantic Analysis, Word Similarity, Sentence Similarity, lexical database, Corpus
+F
+1
+1
+T
+I NTRODUCTION
+problem of calculating the semantic similarity be-
+tween two concepts, words or sentences is a long dealt
+problem in the area of natural language processing. In gen-
+eral, semantic similarity is a measure of conceptual distance
+between two objects, based on the correspondence of their
+meanings [1].
+Determination of semantic similarity in natural language
+processing has a wide range of applications. In internet-
+related applications, the uses of semantic similarity include
+estimating relatedness between search engine queries [2]
+and generating keywords for search engine advertising [3].
+In biomedical applications, semantic similarity has become
+a valuable tool for analyzing the results in gene clustering,
+gene expression and disease gene prioritization [4] [5] [6].
+In addition to this, semantic similarity is also beneficial in
+information retrieval on web [7], text summarization [8]
+and text categorization [9]. Hence, such applications need to
+have a robust algorithm to estimate the semantic similarity
+which can be used across variety of domains.
+All the applications mentioned above are domain spe-
+cific and require different algorithms to serve the purpose
+though the basic idea of calculating the semantic similarity
+remains the same. To determine the closeness of impli-
+cations of the objects under comparison, we need some
+predefined standard measure which readily describes such
+relatedness of the meanings. The absence of predefined
+measure makes the problem of comparing definitions, a
+recursive problem.
+•
+HE
+Lexical databases come into the picture at this point of pro-
+cessing. Lexical databases have connections between words
+which can be utilized to determine the semantic similarity
+of the words [10]. Many approaches have been developed
+over past few years and proved to be very useful in the area
+of semantic analysis [11] [12] [13] [14] [5] [15].
+This paper aims to improve existing algorithms and make
+it robust by integrating it with an corpus of a specific
+domain. The main contribution of this research is the robust
+semantic similarity algorithm which outperforms the exist-
+ing algorithms with respect to the Rubenstein and Good-
+enough benchmark standard [16]. The application domain
+of this research is calculating semantic similarity between
+two Learning Outcomes from course description documents.
+The approach taken to solve this problem is first treating
+the course objectives as natural language sentences and then
+introducing domain specific statistics to calculate the simial-
+rity. A separate article will be dedicated to analyze Learning
+Objectives extracted from different Course Descriptions.
+The next section reviews some related work. Section 3
+elaborates the whole methodology step by step. Section 4
+explains the idea of traversal in a lexical database along
+with an illustrative example in detail. Section 5 contains
+the result of the algorithm for the 65 noun word pairs from
+R&G [16] and the results of the proposed algorithm sentence
+similarity for the sentence pairs in pilot data set [26]. Section
+6 discusses the results obtained and compares it with previ-
+ous methodologies. It also explains the performance of the
+algorithm. Finally, section 7 presents the outcomes in brief
+and draws the conclusion.
+A. Pawar and V. Mago are with the Department of Computer Science,
+Lakehead University, Thunder Bay, ON, P7B 5E1.
+E-mail: { apawar1,vmago } @lakeheadu.ca
+2
+1. This work has been submitted to the IEEE for possible publication.
+Copyright may be transferred without notice, after which this version
+may no longer be accessible.
+R ELATED W ORK
+The recent work in the area of natural language processing
+has contributed valuable solutions to calculate the semanticIEEE TRANSACTIONS ON KNOWLEDGE AND DATA ENGINEERING
+2
+similarity between words and sentences. This section re-
+views some related work to investigate the strengths and
+limitations of previous methods and to identify the partic-
+ular difficulties in computing semantic similarity. Related
+works can roughly be classified into following major cate-
+gories:
+•
+•
+•
+Word co-occurrence methods
+Similarity based on a lexical database
+Method based on web search engine results
+Word co-occurrence methods are commonly used in Infor-
+mation Retrieval (IR) systems [17]. This method has word
+list of meaningful words and every query is considered
+as a document. A vector is formed for the query and for
+documents. The relevant documents are retrieved based on
+the similarity between query vector and document vector
+[9]. This method has obvious drawbacks such as:
+•
+•
+It ignores the word order of the sentence.
+It does not take into account the meaning of the word
+in the context of the sentence.
+But it has following advantages:
+•
+•
+It matches documents regardless the size of docu-
+ments
+It successfully extracts keywords from documents
+[18]
+Using the lexical database methodology, the similarity is
+computed by using a predefined word hierarchy which has
+words, meaning, and relationship with other words which
+are stored in a tree-like structure [14]. While comparing two
+words, it takes into account the path distance between the
+words as well as the depth of the subsumer in the hierarchy.
+The subsumer refers to the relative root node concerning
+the two words in comparison. It also uses a word corpus
+to calculate the ‘information content’of the word which
+influences the final similarity. This methodology has the
+following limitations:
+•
+•
+The appropriate meaning of the word is not consid-
+ered while calculating the similarity, rather it takes
+the best matching pair even if the meaning of the
+word is totally different in two distinct sentence.
+The information content of the word form a corpus,
+differs from corpus to corpus. Hence, final result
+differs for every corpus.
+The third methodology computes relatedness based on
+web search engine results, utilizes the number of search
+results [19]. This technique doesn’t necessarily give the
+similarity between words as words with opposite meaning
+frequently occur together on the web pages, hence influ-
+encing the final similarity index. We have implemented the
+methodology to calcuate the Google Similarity Distance [20].
+The search engines that we used for this study are Google
+and Bing. The results obtained from this method are not
+encouraging for both the search engines.
+Overall, above-mentioned methods compute the semantic
+similarity without considering the context of the word ac-
+cording to the sentence. The proposed algorithm addresses
+aforementioned issues by disambiguating the words in sen-
+tences and forming semantic vectors dynamically for the
+compared sentences and words.
+Fig. 1. Proposed sentence similarity methodology
+3
+T HE P ROPOSED M ETHODOLOGY
+The proposed methodology considers the text as a sequence
+of words and deals with all the words in sentences sepa-
+rately according to their semantic and syntactic structure.
+The information content of the word is related to the fre-
+quency of the meaning of the word in a lexical database or
+a corpus. The method to calculate the semantic similarity
+between two sentences is divided into four parts:
+•
+•
+•
+Word similarity
+Sentence similarity
+Word order similarity
+Fig. 1 depicts the procedure to calculate the similarity be-
+tween two sentences. Unlike other existing methods that use
+the fixed structure of vocabulary, the proposed method uses
+a lexical database to compare the appropriate meaning of
+the word. A semantic vector is formed for each sentence
+which contains the weight assigned to each word for every
+other word from the second sentence in comparison. This
+step also takes into account the information content of the
+word, for instance, word frequency from a standard corpus.
+Semantic similarity is calculated based on two semantic
+vectors. An order vector is formed for each sentence which
+considers the syntactic similarity between the sentences.
+Finally, semantic similarity is calculated based on semantic
+vectors and order vectors. The following section further
+describes each of the steps in more details.IEEE TRANSACTIONS ON KNOWLEDGE AND DATA ENGINEERING
+3
+Fig. 2. Synsets for the word: bank
+3.1
+Word Similarity
+The proposed method uses the sizeable lexical database
+for the English language, WordNet [21], from the Princeton
+University. Following are the steps involved in computing
+word similarity:
+3.1.1 Identifying words for comparison
+Before calculating the semantic similarity between words, it
+is essential to determine the words for comparison. We use
+word tokenizer and ‘parts of speech tagging technique’as
+implemented in natural language processing toolkit, NLTK
+[22]. This step filters the input sentence and tags the words
+into their ‘part of speech’(POS) and labels them accordingly.
+As discussed in section 2, WordNet has path relationships
+between noun-noun and verb-verb only. Such relationships
+are absent in WordNet for the other parts of speeches.
+Hence, it is not possible to get a numerical value that
+represents the link between other parts of speeches except
+nouns and verbs. Therefore, to reduce the time and space
+complexity of the algorithm, we only consider nouns and
+verbs to calculate the similarity.
+Example: ‘A voyage is a long journey on a ship or in a
+spacecraft’
+Table 1 represents the words and corresponding parts of
+speeches. The parts of speeches are as per the Penn Treebank
+[23].
+3.1.2 Associating word with a sense
+The primary structure of the WordNet is based on synonymy.
+Every word has some synsets according to the meaning of
+the word in the context of a statement. For example, word:
+‘bank.’ Fig. 2 represents all the synsets for the word ‘bank’.
+The distance between synsets in comparison varies as we
+change the meaning of the word.
+Consider an example where we calculate the shortest
+path distance between words ‘river’ and ‘bank.’ WordNet
+has only one synset for the word ‘river’. We will calculate
+the path distance between synset of ‘river’ and three synsets
+of word ‘bank’. Table 2 represents the synsets and corre-
+sponding definitions for the words ‘bank’ and ‘river’.
+Shortert distances for synset pairs are represented in
+Table 3. When comparing two sentences, we have many
+such word pairs which have multiple synsets. Therefore,
+TABLE 1
+Parts of speeches
+Word
+A
+voyage
+is
+a
+long
+journey
+on
+a
+ship
+or
+in
+a
+spacecraft
+Part of Speech
+DT - Determiner
+NN - Noun
+VBZ - Verb
+DT - Determiner
+JJ - Adjective
+NN - Noun
+IN - Preposition
+DT - Determiner
+NN - Noun
+CC
+-
+Coordinating
+conjunction
+IN - Prepostion
+DT - Determiner
+NN - Noun
+TABLE 2
+Synsets and corresponding definitions from WordNet
+Synset
+Synset(‘river.n.01’)
+Synset(‘bank.n.01’)
+Synset(‘bank.n.09’)
+Synset(‘bank.n.06’)
+Definition
+a large natural stream of
+water (larger than a creek)
+sloping land (especially the
+slope beside a body of
+water)
+a
+building
+in
+which
+the business of banking
+transacted
+the funds held by a gam-
+bling house or the dealer in
+some gambling games
+TABLE 3
+Synsets and corresponding shortest path distances from WordNet
+Synset Pair
+Synset(‘river.n.01’) - Synset(‘bank.n.01’)
+Synset(‘river.n.01’) - Synset(‘bank.n.09’)
+Synset(‘river.n.01’) - Synset(‘bank.n.06’)
+Shortest Path Distance
+8
+10
+11IEEE TRANSACTIONS ON KNOWLEDGE AND DATA ENGINEERING
+4
+not considering the proper synset in context of the sen-
+tence, could introduce errors at the early stage of similarity
+calculation. Hence, sense of the word affects significantly
+on the overall similarity measure. Identifying sense of the
+word is part of the ‘word sense disambiguation’ research
+area. We use ‘max similarity’ algorithm, Eq. (1), to perform
+word sense disambiguation [24] as implemented in Pywsd,
+an NLTK based Python library [25].
+n
+X
+argmax synset(a) (
+max synset(i) (sim(i, a))
+TABLE 4
+Synset and corresponding hyponyms from WordNet
+Synset
+Synset(‘vehicle.n.01’)
+(1)
+i
+3.1.3 Shortest path distance between synsets
+The following example explains in detail the methodolgy
+used to calculate the shortest path distance.
+Entity
+Unit Conveyence
+Instrumentality Vehicle
+Container Wheeled Vehicle
+self propelled vehicle
+bicycle
+hierarchy have more general features and less semantic
+information, as compared to words at the lower layer of
+hierarchy [14].
+Hierarchical distance plays an important role when the
+path distances between word pairs are same. For instance,
+referring to Fig. 3, consider following word pairs:
+car - motorcycle and bicycle - self propelled vehicle.
+The shortest path distance between both the pairs is 2, but
+the pair car - motorcycle has more semantic information and
+specific properties than bicycle - self propelled vehicle. Hence,
+we need to scale up the similarity measure if the word
+pair subsume words at the lower level of the hierarchy and
+scale down if they subsume words at the upper level of
+the hierarchy. To include this behavior, we use previously
+established function [14]:
+motor vehicle
+g(h) =
+motorcycle
+car
+Hyponyms
+Synset(‘bumper car.n.01’)
+Synset(‘craft.n.02’)
+Synset(‘military vehicle.n.01’)
+Synset(‘rocket.n.01’)
+Synset(‘skibob.n.01’)
+Synset(‘sled.n.01’)
+Synset(‘steamroller.n.02’)
+Synset(‘wheeled vehicle.n.01’)
+e βh − e −βh
+e βh + e −βh
+(3)
+For WordNet, the optimal values of α and β are 0.2 and 0.45
+respectively as reported previously [8].
+Fig. 3. Hierarchical structure from WordNet
+Referring to Fig. 3, consider words:
+w1 = motorcycle and w2 = car
+We are referring to Synset(‘motorcycle.n.01’) for ‘motorcycle’
+and (‘car.n.01’) for ‘car’.
+The traversal path is : motorcycle → motor vehicle →
+car. Hence, the shortest path distance between motorcycle
+and car is 2. In WordNet, the gap between words increases
+as similarity decreases. We use the previously established
+monotonically decreasing function [14]:
+3.2
+Information content of the word
+where l is the shortest path distance and α is a constant. The
+selection of exponential function is to ensure that the value
+of f(l) lies between 0 to 1. The meaning of the word differs as we change the
+domain of operation. We can use this behavior of natural
+language to make the similarity measure domain-specific.
+Aforementioned is an optional part of the algorithm. It
+is used to influence the similarity measure if the domain
+operation is predetermined. To illustrate the Information
+Content of the word in action, consider the word: bank. The
+most frequent meaning of the word bank in the context of
+Potamology (the study of rivers) is sloping land (especially
+the slope beside a body of water). The most frequent meaning
+of the word bank in the context of Economics would be a
+financial institution that accepts deposits and channels the money
+into lending activities.
+3.1.4 Hierarchical distribution of words
+In WordNet, the primary relationship between the synsets
+is the super-subordinate relation, also called hyperonymy,
+hyponymy or ISA relation [21]. This relationship connects
+the general concept synsets to the synsets having specific
+characteristics. For example, Table 4 represents vehicle and
+its hyponyms.
+The hyponyms of ‘vehicle’ have more specific properties
+and represent the particular set, whereas ‘vehicle’ has
+general properties. Hence, words at the upper layer of the Used along with the Word Disambiguation Approach
+described in section 3.1.2, the final similarity of the word
+would be different for every corpus. The corpus belonging
+to particular domain works as supervised learning data
+for the algorithm. We first disambiguate the whole corpus
+to get the sense of the word and further calculate the
+frequency of the particular sense. These statistics for the
+corpus work as the knowledge base for the algorithm. Fig.
+4 represents the steps involved in the analysis of corpus
+statistics.
+f (l) = e −αl
+(2)IEEE TRANSACTIONS ON KNOWLEDGE AND DATA ENGINEERING
+5
+S1= “A jewel is a precious stone used to decorate valuable
+things that you wear, such as rings or necklaces.”
+S2= “A gem is a jewel or stone that is used in jewellery.”
+List of tagged words for S1:
+[(‘jewel’, Synset(‘jewel.n.01’)), Synset(‘jewel.n.02’)],
+[(‘stone’, Synset(‘stone.n.02’)), Synset(‘stone.n.13’)],
+[(‘used’, Synset(‘use.v.03’)), Synset(‘use.v.06’)],
+[(‘decorate’, Synset(‘decorate.v.01’)), Synset(‘dress.v.09’)],
+[(‘valuable’, Synset(‘valuable.a.01’)), Synset(‘valuable.s.02’)],
+[(‘things’, Synset(‘thing.n.04’)), Synset(‘thing.n.12’)],
+[(‘wear’, Synset(‘wear.v.01’)), Synset(‘wear.v.09’)],
+[(‘rings’, Synset(‘ring.n.08’)), Synset(‘band.n.12’)],
+[(‘necklaces’, Synset(‘necklace.n.01’)), Synset(‘necklace.n.01’)]
+Length of list of tagged words for S1: 9
+List of tagged words for S2:
+[(‘gem’, Synset(‘jewel.n.01’)), Synset(‘jewel.n.01’)],
+[(‘jewel’, Synset(‘jewel.n.01’)), Synset(‘jewel.n.02’)],
+[(‘stone’, Synset(‘gem.n.02’)), Synset(‘stone.n.13’)],
+[(‘used’, Synset(‘use.v.03’)), Synset(‘use.v.06’)]
+[(‘jewellery’, Synset(‘jewelry.n.01’)), Synset(‘jewelry.n.01’)]
+Length of list of tagged words for S2: 5
+Fig. 4. Corpus statistics calculation diagram
+3.3
+Sentences’ semantic similarity
+As Li [14] states, the meaning of the sentence is reflected by
+the words in the sentence. Hence, we can use the semantic
+information from section 3.1 and section 3.2 to calculate the
+final similarity measure. Previously established methods
+to estimate the semantic similarity between sentences,
+use the static approaches like using a precompiled list of
+words and phrases. The problem with this technique is the
+precompiled list of words and phrases doesn’t necessarily
+reflect the correct semantic information in the context of
+compared sentences.
+The dynamic approach includes the formation of joint word
+vector which compiles words from sentences and use it as a
+baseline to form individual vectors. This method introduces
+inaccuracy for the long sentences and the paragraphs
+containing multiple sentences.
+Unlike these methods, our method forms the semantic
+value vectors for the sentences and aims to keep the size of
+the semantic value vector minimum. Formation of semantic
+vector begins after the section 3.1.2. This approach avoids
+overhead involved to form semantic vectors separately
+unlike done in previously discussed methods. Also, we
+eliminate prepositions, conjunctions and interjections in
+this stage. Hence, these connectives are automatically
+eliminated from the semantic vector. We determine the size
+of the vector, based on the number of tokens from section
+3.1.2. Every unit of the semantic vector is initialized to
+null to void the foundational effect. Initializing semantic
+vector to a unit positive value discards the negative/null
+effects, and overall semantic similarity will be a reflection
+of most similar words in the sentences. Let’s see an example.
+We eliminate words like a, is, to, that, you, such, as, or;
+hence further reducing the computing overhead. The
+formed semantic vectors contain semantic information
+concerning all the words from both the sentences. For
+example, the semantic vector for S1 is:
+V1 = [ 0.99742103, 0.90118787, 0.42189901, 0.0, 0.0,
+0.40630945, 0.0, 0.59202, 0.81750916]
+Vector V1 has semantic information from S1 as well as
+from S2. Similarly, vector V2 also has semantic information
+from S1 and S2. To establish a similarity value using two
+vectors, we use the magnitude of the normalized vectors.
+S = ||V 1||.||V 2||
+(4)
+We make this method adaptable to longer sentences by
+introducing a variable( ζ ) which will be dynamically cal-
+culated at runtime. With the utilization of ζ this method
+can also be used to compare paragraphs with multiple
+sentences.
+3.3.1
+Determination of ζ
+The words with maximum similarity have more impact
+on the magnitude of the vector. Using this property, we
+establish ζ for the sentences in comparison. According to
+Rubinstein 1965, the benchmark synonymy value of two
+words is 0.8025 [16]. Using this as a determination standard,
+we calculate all the cells from V1 and V2 with the value
+greater than 0.8025. ζ is given by:
+ζ = sum(C1, C2)/γ
+(5)
+where C1 is count of valid elements in V1 and C2 is count
+of valid cells in V2. γ is set to 1.8 to limit the value ofIEEE TRANSACTIONS ON KNOWLEDGE AND DATA ENGINEERING
+6
+similarity in the range of 0 to 1. Now, using Eq. 4 and Eq. 5,
+we establish similarity as:
+Sim = S/ζ
+Algorithm 1 Semantic similarity between sentences
+1: procedure S ENTENCE SIMILARITY
+2:
+S1 - list of tagged tokens ← disambiguate
+3:
+S2 - list of tagged tokens ← disambiguate
+4:
+vector length ← max(length(S1),length(S2))
+5:
+V1 , V2 ← vector length(null)
+6:
+V1 , V2 ← vector length(word similarity(S1,S2))
+7:
+ζ =0
+8:
+while S1 list of tagged tokens do
+9:
+if
+word similarity value
+benchmark similarity value then
+10:
+C1 ← C1+1
+11:
+while S2 list of tagged tokens do
+12:
+if
+word similarity value
+benchmark similarity value then
+13:
+C2 ← C2+1
+14:
+ζ ← sum(C1, C2)/γ
+15:
+S ← ||V 1||.||V 2||
+16:
+if sum(C1, C2) = 0 then
+17:
+ζ ← vector length/2
+18:
+Sim ← S /ζ
+3.4
+(6)
+>
+>
+•
+The edge-based approach using lexical database will
+produce a result showing both S1 and S2 are same, but
+since the words appear in a different order we should
+scale down the overall similarity as they represent different
+meaning. We start with the formation of vectors V1 and
+V2 dynamically for sentences S1 and S2 respectively.
+Initialization of vectors is performed as explained in section
+3.3. Instead of forming joint word set, we treat sentences
+relatively to keep the size of vector minimum.
+The process starts with the sentence having maximum
+length. Vector V1 is formed with respect to sentence 1 and
+cells in V1 are initialized to index values of words in S1
+beginning with 1. Hence V1 for S1 is:
+V1 = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+Now, we form V2 concerning S1 and S2. To form V2, every
+word from S2 is compared with S1. If the word from S2 is
+absent in S1, then the cell in V2 is filled with the index value
+of the word in sentence S2. If the word from S2 matches
+with a word from S1, then the index of the word from S1 is
+filled in V2.
+In the above example, consider words ‘fox’ and ‘dog’ from
+sentence 2. The word ‘fox’ from S2 is present in S1 at the
+index 9. Hence, entry for ‘fox’ in V2 would be 9. Similarly,
+the word ‘dog’ form S2 is present in the S1 at the index
+4. Hence, entry for ‘dog’ in V2 would be 9. Following the
+same procedure for all the words, we get V2 as:
+V2 = [1, 2, 3, 9, 5, 6, 7, 8, 4]
+Finally, word order similarity is given by:
+Word Order Similarity
+Along with semantic nature of the sentences, we need to
+consider the syntactic structure of the sentences too. The
+word order similarity, simply put, is the aggregation of
+comparisons of word indices in two sentences. The semantic
+similarity approach based on words and the lexical database
+doesn’t take into account the grammar of the sentence. Li
+[14] assigns a number to each word in the sentence and
+forms a word order vector according to their occurrence
+and similarity. They also consider the semantic similarity
+value of words to decide the word order vector. If a word
+from sentence 1 is not present in sentence 2, the number
+assigned to the index of this word in word order vector
+corresponds to the word with maximum similarity. This
+case is not valid always and introduces errors in the final
+semantic similarity index. For the methods which calculate
+the similarity by chunking the sentence into words, it is not
+always necessary to decide the word order similarity. For
+such techniques, the word order similarity actually matters
+when two sentences contain same words in different order.
+Otherwise, if the sentences contain different words, the
+word order similarity should be an optional construct.
+In the entirely different sentences, word order similarity
+doesn’t impact on the large scale. For such sentences, the
+impact of word order similarity is negligible as compared
+to the semantic similarity. Hence, in our approach, we
+implement word order similarity as an optional feature.
+Consider following classical example:
+•
+S1: A quick brown dog jumps over the lazy fox.
+S2: A quick brown fox jumps over the lazy dog.
+W s = || V1 − V2 ||/|| V1 ∗ V2 ||
+(7)
+In this case, W s is 0.067091.
+4
+I MPLEMENTATION USING S EMANTIC NETS
+The database used to implement the proposed methodology
+is WordNet and statistical information from WordNet is
+used calculate the information content of the word. To test
+the behavior with an external corpus, a small compiled
+corpus is used. The corpus contained ten sentences be-
+longing to ‘Chemistry’ domain. This section describes the
+prerequisites to implement the method.
+4.1
+The Database - WordNet
+WordNet is a lexical semantic dictionary available for online
+and offline use, developed and hosted at Princeton. The
+version used in this study is WordNet 3.0 which has 117,000
+synonymous sets, Synsets. Synsets for a word represent the
+possible meanings of the word when used in a sentence.
+WordNet currently has synset structure for nouns, verbs,
+adjectives and adverbs. These lexicons are grouped sepa-
+rately and do not have interconnections; for instance, nouns
+and verbs are not interlinked.
+The main relationship connecting the synsets is the super-
+subordinate(ISA-HASA) relationship. The relation becomes
+more general as we move up the hierarchy. The root node
+of all the noun hierarchies is ‘Entity’. Like nouns, verbs are
+arranged into hierarchies as well.IEEE TRANSACTIONS ON KNOWLEDGE AND DATA ENGINEERING
+7
+4.1.1 Shortest path distance and hierarchical distances
+from WordNet
+The WordNet relations connect the same parts of speeches.
+Thus, it consists of four subnets of nouns, verbs, adjectives
+and adverbs respectively. Hence, determining the similarity
+between cross-domains is not possible.
+The shortest path distance is calculated by using the tree-
+like hierarchical structure. To figure the shortest path, we
+climb up the hierarchy from both the synsets and determine
+the meeting point which is also a synset. This synset is
+called subsumer of the respective synsets. The shortest path
+distance equals the hops from one synset to another.
+We consider the position of subsumer of two synsets to
+determine the hierarchical distance. Subsumer is found by
+using the hyperonymy (ISA) relation for both the synsets. The
+algorithm moves up the hierarchy until a common synset is
+found. This common synset is the subsumer for the synsets
+in comparison. A set of hypernyms is formed individually
+for each synset and the intersection of sets contains the
+subsumer. If the intersection of these sets contain more than
+one synset, then the synset with the shortest path distance
+is considered as a subsumer.
+4.1.2
+The Information content of the word
+For general purposes, we use the statistical information
+from WordNet for the information content of the word.
+WordNet provides the frequency of each synset in the
+WordNet corpus. This frequency distribution is used in the
+implementation of section 3.2.
+4.1.3
+Illustrative example
+This section explains in detail the steps involved in the
+calculation of semantic similarity between two sentences.
+•
+•
+S1: A gem is a jewel or stone that is used in jewellery.
+S2: A jewel is a precious stone used to decorate valu-
+able things that you wear, such as rings or necklaces.
+Following segment contains the parts of speeches and
+corresponding synsets used to determine the similarity.
+For S1 the tagged words are:
+Synset(‘jewel.n.01’) : a precious or semiprecious stone
+incorporated into a piece of jewelry
+Synset(‘jewel.n.01’) : a precious or semiprecious stone
+incorporated into a piece of jewelry
+Synset(‘gem.n.02’) : a crystalline rock that can be cut and
+polished for jewelry
+Synset(‘use.v.03’) : use up, consume fully
+Synset(‘jewelry.n.01’) : an adornment (as a bracelet or ring
+or necklace) made of precious metals and set with gems (or
+imitation gems)
+TABLE 5
+L1 compared with L2
+Words
+gem - jewel
+gem - stone
+gem - used
+gem - decorate
+gem - valuable
+gem - things
+gem - wear
+gem - rings
+gem - necklaces
+jewel - jewel
+jewel - stone
+jewel - used
+jewel - decorate
+jewel - valuable
+jewel - things
+jewel - wear
+jewel - rings
+jewel - necklaces
+stone - jewel
+stone - stone
+stone - used
+stone - decorate
+stone - valuable
+stone - things
+stone - wear
+stone - rings
+stone - necklaces
+used - jewel
+used - stone
+used - used
+used - decorate
+used - valuable
+used - things
+used - wear
+used - rings
+used - necklaces
+jewellery - jewel
+jewellery - stone
+jewellery - used
+jewellery - decorate
+jewellery - valuable
+jewellery - things
+jewellery - wear
+jewellery - rings
+jewellery - necklaces
+Similarity
+0.908008550956
+0.180732071642
+0.0
+0.0
+0.0
+0.284462910289
+0.0
+0.485032351325
+0.669319889871
+0.997421032224
+0.217431543606
+0.0
+0.0
+0.0
+0.406309448212
+0.0
+0.456849659596
+0.41718607131
+0.475813717007
+0.901187866267
+0.0
+0.0
+0.0
+0.198770510639
+0.0
+0.100270000776
+0.0856785820827
+0.0
+0.0
+0.42189900525
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.509332774797
+0.220266070205
+0.0
+0.0
+0.0
+0.346687374295
+0.0
+0.592019999822
+0.81750915958
+Synset(‘decorate.v.01’) : make more attractive by adding
+ornament, colour, etc.
+Synset(‘valuable.a.01’) : having great material or monetary
+value especially for use or exchange
+Synset(‘thing.n.04’) : an artifact
+Synset(‘wear.v.01’) : be dressed in
+Synset(‘ring.n.08’) : jewelry consisting of a circlet of precious
+metal (often set with jewels) worn on the finger
+Synset(‘necklace.n.01’) : jewelry consisting of a cord or
+chain (often bearing gems) worn about the neck as an
+ornament (especially by women)
+For S2 the tagged words are:
+Synset(‘jewel.n.01’) : a precious or semiprecious stone
+incorporated into a piece of jewelry
+Synset(‘stone.n.02’) : building material consisting of a piece
+of rock hewn in a definite shape for a special purpose
+Synset(‘use.v.03’) : use up, consume fully
+After identifying the synsets for comparison, we find
+the shortest path distances between all the synsets and
+take the best matching result to form the semantic vector.
+The intermediate list is formed which contains the words
+and the identified synsets. L1 and L2 below represent the
+intermediate lists.IEEE TRANSACTIONS ON KNOWLEDGE AND DATA ENGINEERING
+TABLE 6
+L2 compared with L1
+Words
+jewel - gem
+jewel - jewel
+jewel - stone
+jewel - used
+jewel - jewellery
+stone - gem
+stone - jewel
+stone - stone
+stone - used
+stone - jewellery
+used - gem
+used - jewel
+used - stone
+used - used
+used - jewellery
+decorate - gem
+decorate - jewel
+decorate - stone
+decorate - used
+decorate - jewellery
+valuable - gem
+valuable - jewel
+valuable - stone
+valuable - used
+valuable - jewellery
+things - gem
+things - jewel
+things - stone
+things - used
+things - jewellery
+wear - gem
+wear - jewel
+wear - stone
+wear - used
+wear - jewellery
+rings - gem
+rings - jewel
+rings - stone
+rings - used
+rings - jewellery
+necklaces - gem
+necklaces - jewel
+necklaces - stone
+necklaces - used
+necklaces - jewellery
+Similarity
+0.908008550956
+0.997421032224
+0.475813717007
+0.0
+0.509332774797
+0.180732071642
+0.217431543606
+0.901187866267
+0.0
+0.220266070205
+0.0
+0.0
+0.0
+0.42189900525
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.0
+0.284462910289
+0.406309448212
+0.198770510639
+0.0
+0.346687374295
+0.0
+0.0
+0.0
+0.0
+0.0
+0.485032351325
+0.456849659596
+0.100270000776
+0.0
+0.592019999822
+0.669319889871
+0.41718607131
+0.0856785820827
+0.0
+0.81750915958
+8
+TABLE 7
+Linear regression parameter values for proposed methodology
+Slope
+Intercept
+r-value
+p-value
+stderr
+0.84312603549362108
+0.017742354112473213
+0.87536955005374539
+1.4816200698817255e-21
+0.058665976202757132
+Fig. 5. Perfomance of word similarity method vs Standard by Rubenstein
+and Goodenough
+contains the cross comparison of L1 and L2.
+Cross-comparison with all the words from S1 and S2 is
+essential because if a word from statement S1 best matches
+with a word from S2, does not necessarily mean that it
+would be true if the case is reversed. This scenario can be
+observed with the words jewel from Table 5 and things from
+Table 6. things best matches with jewel with index of 0.4063
+whereas jewel from Table 5 best matches with jewel from
+Table 6.
+After getting the similarity values for all the word pairs, we
+need to determine an index entry for the semantic vector.
+The entry in the semantic vector for a word is the highest
+similarity value from the comparison with the words from
+other sentence. For instance, for the word gem, from Table
+5, the corresponding semantic vector entry is 0.90800855 as
+it is the maximum of all the compared similarity values.
+Hence, we get V1 and V2 as following:
+L1:
+[(‘gem’,
+Synset(‘jewel.n.01’))],
+[(‘jewel’,
+Synset(‘jewel.n.01’))], [(‘stone’, Synset(‘gem.n.02’))], [(‘used’,
+Synset(‘use.v.03’))], [(‘jewellery’, Synset(‘jewelry.n.01’))]
+L2:
+[(‘jewel’,
+Synset(‘jewel.n.01’))],
+[(‘stone’,
+Synset(‘stone.n.02’))],
+[(‘used’,
+Synset(‘use.v.03’))],
+[(‘decorate’,
+Synset(‘decorate.v.01’))],
+[(‘valuable’,
+Synset(‘valuable.a.01’))],
+[(‘things’,
+Synset(‘thing.n.04’))],
+[(‘wear’, Synset(‘wear.v.01’))], [(‘rings’, Synset(‘ring.n.08’))],
+[(‘necklaces’, Synset(‘necklace.n.01’))]
+Now we begin to form the semantic vectors for S1
+and S2 by comparing every synset from L1 with every
+synset from L2. The intermediate step here is to determine
+the size of semantic vector and initialize it to null. In this
+example, the size of the semantic vector is 9 by referring
+to the method explained in section 3.3. The following part
+Fig. 6. Linear Regression model word similarity method against Stan-
+dard by Rubenstein and GoodenoughIEEE TRANSACTIONS ON KNOWLEDGE AND DATA ENGINEERING
+9
+TABLE 8
+Rubenstein and Goodenough Vs Lee2014 Vs Proposed Algorithm Similarity
+R&GNo R&Gpair R&G Similarity Lee2014
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65 cord smile
+noon string
+rooster voyage
+fruit furnace
+autograph shore
+automobile wizard
+mound stove
+grin implement
+asylum fruit
+asylum monk
+graveyard madhouse
+boy rooster
+glass magician
+cushion jewel
+monk slave
+asylum cemetery
+coast forest
+grin lad
+shore woodland
+monk oracle
+boy sage
+automobile cushion
+mound shore
+lad wizard
+forest graveyard
+food rooster
+cemetery woodland
+shore voyage
+bird woodland
+coast hill
+furnace implement
+crane rooster
+hill woodland
+car journey
+cemetery mound
+glass jewel
+magician oracle
+crane implement
+brother lad
+sage wizard
+oracle sage
+bird cock
+bird crane
+food fruit
+brother monk
+asylum madhouse
+furnace stove
+magician wizard
+hill mound
+cord string
+glass tumbler
+grin smile
+serf slave
+journey voyage
+autograph signature
+coast shore
+forest woodland
+implement tool
+cock rooster
+boy lad
+cushion pillow
+cemetery graveyard
+automobile car
+gem jewel
+midday noon 0.005
+0.01
+0.01
+0.0125
+0.015
+0.0275
+0.035
+0.045
+0.0475
+0.0975
+0.105
+0.11
+0.11
+0.1125
+0.1425
+0.1975
+0.2125
+0.22
+0.225
+0.2275
+0.24
+0.2425
+0.2425
+0.2475
+0.25
+0.2725
+0.295
+0.305
+0.31
+0.315
+0.3425
+0.3525
+0.37
+0.3875
+0.4225
+0.445
+0.455
+0.5925
+0.6025
+0.615
+0.6525
+0.6575
+0.67
+0.6725
+0.685
+0.76
+0.7775
+0.8025
+0.8225
+0.8525
+0.8625
+0.865
+0.865
+0.895
+0.8975
+0.9
+0.9125
+0.915
+0.92
+0.955
+0.96
+0.97
+0.98
+0.985
+0.985 0.01
+0.005
+0.0125
+0.0475
+0.005
+0.02
+0.005
+0.005
+0.005
+0.0375
+0.0225
+0.0075
+0.1075
+0.0525
+0.045
+0.0375
+0.0475
+0.0125
+0.0825
+0.1125
+0.0425
+0.02
+0.035
+0.0325
+0.065
+0.055
+0.0375
+0.02
+0.0125
+0.1
+0.05
+0.02
+0.145
+0.0725
+0.0575
+0.1075
+0.13
+0.185
+0.1275
+0.1525
+0.2825
+0.035
+0.1625
+0.2425
+0.045
+0.215
+0.3475
+0.355
+0.2925
+0.47
+0.1375
+0.485
+0.4825
+0.36
+0.405
+0.5875
+0.6275
+0.59
+0.8625
+0.58
+0.5225
+0.7725
+0.5575
+0.955
+0.6525
+Proposed Algorithm Simi-
+larity
+0.0899021679
+0.0440401486
+0.010051669
+0.0720444643
+0.0742552483
+0.0906955651
+0.0656419906
+0.0899021679
+0.0720444643
+0.0757289762
+0.0607950554
+0.0907164485
+0.1782144411
+0.2443794293
+0.3750880747
+0.1106378337
+0.1106378337
+0.0899021679
+0.3011198804
+0.2464473057
+0.2017739882
+0.2018466921
+0.2018466921
+0.3673305438
+0.2015952767
+0.2732326922
+0.2015952767
+0.4075214431
+0.1651985693
+0.4103617321
+0.2464473057
+0.2465928735
+0.2918421392
+0.2730713984
+0.0656419906
+0.3176716099
+0.3057403627
+0.4486585394
+0.5462290271
+0.3675115617
+0.5279307332
+0.5750838807
+0.4978503715
+0.6196075053
+0.2664571358
+0.8185286992
+0.1651985693
+0.9985079423
+0.8148010746
+0.8148010746
+0.8561402541
+0.9910074537
+0.8673305438
+0.8185286992
+0.8499457067
+0.8179120223
+0.9780261147
+0.0822919486
+0.9093502924
+0.9093502924
+0.8157293861
+0.9985079423
+0.8185286992
+0.8175091596
+0.9993931059IEEE TRANSACTIONS ON KNOWLEDGE AND DATA ENGINEERING
+10
+TABLE 9
+Proposed Algorithm Similarity Vs Islam2008 Vs Li2006
+R&G No R&G pair
+1
+5
+9
+12
+17
+21
+25
+29
+33
+37
+41
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65 cord smile
+autograph shore
+asylum fruit
+boy rooster
+coast forest
+boy sage
+forest graveyard
+bird woodland
+hill woodland
+magician oracle
+oracle sage
+furnace stove
+magician wizard
+hill mound
+cord string
+glass tumbler
+grin smile
+serf slave
+journey voyage
+autograph signature
+coast shore
+forest woodland
+implement tool
+cock rooster
+boy lad
+cushion pillow
+cemetery graveyard
+automobile car
+gem jewel
+midday noon
+Proposed Algorithm Simi-
+larity
+0.0899021679
+0.0742552483
+0.0720444643
+0.0907164485
+0.1106378337
+0.2017739882
+0.2015952767
+0.1651985693
+0.2918421392
+0.3057403627
+0.5279307332
+0.1651985693
+0.9985079423
+0.8148010746
+0.8148010746
+0.8561402541
+0.9910074537
+0.8673305438
+0.8185286992
+0.8499457067
+0.8179120223
+0.9780261147
+0.0822919486
+0.9093502924
+0.9093502924
+0.8157293861
+0.9985079423
+0.8185286992
+0.8175091596
+0.9993931059
+Fig. 7. Comparison of linear regressions from various algorithms with
+R&G1965
+•
+•
+V1= [ 0.90800855, 0.99742103, 0.90118787, 0.42189901,
+0.81750916, 0.0, 0.0, 0.0, 0.0]
+V2= [ 0.99742103, 0.90118787, 0.42189901, 0.0, 0.0,
+0.40630945, 0.0, 0.59202, 0.81750916]
+The intermediate step here is to calculate the dot product
+of the magnitude of normalized vectors: V1 and V2 as
+explained in section 3.3.
+S = 3.31974454153
+The following segment explains the determination of ζ with
+reference to section 3.3.1.
+C1 for V1 is 4. C2 for V2 is 3. Hence, ζ is (4+3)/1.8 = 3.89.
+A.Islam2008 Lietal.2006
+0.06
+0.11
+0.07
+0.16
+0.26
+0.16
+0.33
+0.12
+0.29
+0.2
+0.09
+0.3
+0.34
+0.15
+0.49
+0.28
+0.32
+0.44
+0.41
+0.19
+0.47
+0.26
+0.51
+0.94
+0.6
+0.29
+0.51
+0.52
+0.65
+0.93 0.33
+0.29
+0.21
+0.53
+0.36
+0.51
+0.55
+0.33
+0.59
+0.44
+0.43
+0.72
+0.65
+0.74
+0.68
+0.65
+0.49
+0.39
+0.52
+0.55
+0.76
+0.7
+0.75
+1
+0.66
+0.66
+0.73
+0.64
+0.83
+1
+Fig. 8. Linear regression model- Mean Human Similarity against Algo-
+rithm Sentence Similarity
+Now, the final similarity is
+Similarity = S/ ζ = 3.31974454153/3.89 = 0.8534.
+5
+E XPERIMENTAL R ESULTS
+To evaluate the algorithm, we used a standard dataset
+which has 65 noun pairs originally measure by Rubenstein
+and Goodenough [16]. The data has been used in many
+investigations over the years and has been established as a
+stable source of the semantic similarity measure. The word
+similarity obtained in this experiment is assisted by the
+standard sentences in Pilot Short Text Semantic Similarity
+Benchmark Data Set by James O’Shea [26]. The aim ofIEEE TRANSACTIONS ON KNOWLEDGE AND DATA ENGINEERING
+11
+TABLE 10
+Sentence Similarity from proposed methodology compared with human mean similarity from Li2006
+R&G
+number Sentence 1 Sentence 2 Mean Human
+Similarity 1 Cord is strong, thick string. 0.01 2 A rooster is an adult male chicken. 0.005 0.2593
+3 Noon is 12 o’clock in the middle of the day. 0.0125 0.03455
+4 Fruit or a fruit is something which grows on a
+tree or bush and which contains seeds or a stone
+covered by a substance that you can eat.
+An autograph is the signature of someone
+famous which is specially written for a fan to
+keep.
+An automobile is a car. A smile is the expression that you have on your
+face when you are pleased or amused, or when
+you are being friendly.
+A voyage is a long journey on a ship or in a
+spacecraft.
+String is thin rope made of twisted threads, used
+for tying things together or tying up parcels.
+A furnace is a container or enclosed space in
+which a very hot fire is made, for example to
+melt metal, burn rubbish or produce steam.
+The shores or shore of a sea, lake, or wide river is
+the land along the edge of it. Proposed
+Algorithm
+Sentence
+Similarity
+0.0225
+0.0475 0.1388
+0.0050 0.0701
+In legends and fairy stories, a wizard is a man
+who has magic powers.
+A stove is a piece of equipment which provides
+heat, either for cooking or for heating a room.
+An implement is a tool or other pieces of
+equipment.
+Fruit or a fruit is something which grows on a
+tree or bush and which contains seeds or a stone
+covered by a substance that you can eat.
+A monk is a member of a male religious
+community that is usually separated from the
+outside world.
+If you describe a place or situation as a
+madhouse,you mean that it is full of confusion
+and noise.
+A magician is a person who entertains people by
+doing magic tricks.
+A rooster is an adult male chicken.
+A jewel is a precious stone used to decorate
+valuable things that you wear, such as rings or
+necklaces.
+A slave is someone who is the property of
+another person and has to work for that person. 0.0200 0.0088
+0.0050 0.4968
+0.0050 0.0099
+0.0050 0.01456
+0.0375 0.0175
+0.0225 0.1339
+0.0075 0.0911
+0.1075
+0.0525 0.2921
+0.1745
+0.0450 0.1394
+A cemetery is a place where dead peoples bodies
+or their ashes are buried.
+A forest is a large area where trees grow close
+together.
+A lad is a young man or boy.
+Woodland is land with a lot of trees. 0.375 0.03398
+0.0475 0.3658
+0.0125
+0.0825 0.0281
+0.3192
+In ancient times, an oracle was a priest or
+priestess who made statements about future
+events or about the truth.
+A sage is a person who is regarded as being very
+wise.
+A cushion is a fabric case filled with soft
+material, which you put on a seat to make it
+more comfortable.
+The shores or shore of a sea, lake, or wide river is
+the land along the edge of it.
+In legends and fairy stories, a wizard is a man
+who has magic powers.
+A graveyard is an area of land, sometimes near a
+church, where dead people are buried.
+A rooster is an adult male chicken.
+Woodland is land with a lot of trees. 0.1125 0.1011
+0.0425 0.2305
+0.0200 0.0330
+0.0350 0.0386
+0.0325 0.3939
+0.0650 0.2787
+0.0550
+0.0375 0.2972
+0.1240
+A voyage is a long journey on a ship or in a
+spacecraft.
+Woodland is land with a lot of trees. 0.0200 0.0304
+0.0125 0.1334
+A hill is an area of land that is higher than the
+land that surrounds it.
+An implement is a tool or other piece of
+equipment. 0.1000 0.8032
+0.0500 0.1408
+A rooster is an adult male chicken. 0.0200 0.0564
+Woodland is land with a lot of trees. 0.1450 0.7619
+5
+6
+7
+8 A mound of something is a large rounded pile of
+it.
+A grin is a broad smile.
+9 An asylum is a psychiatric hospital.
+10 An asylum is a psychiatric hospital.
+11 A graveyard is an area of land, sometimes near a
+church, where dead people are buried.
+12 16 Glass is a hard transparent substance that is used
+to make things such as windows and bottles.
+A boy is a child who will grow up to be a man.
+A cushion is a fabric case filled with soft
+material, which you put on a seat to make it
+more comfortable.
+A monk is a member of a male religious
+community that is usually separated from the
+outside world.
+An asylum is a psychiatric hospital.
+17 The coast is an area of land that is next to the sea.
+18
+19 21 A grin is a broad smile.
+The shores or shore of a sea, lake, or wide river is
+the land along the edge of it.
+A monk is a member of a male religious
+community that is usually separated from the
+outside world.
+A boy is a child who will grow up to be a man.
+22 An automobile is a car.
+23 A mound of something is a large rounded pile of
+it.
+A lad is a young man or boy.
+13
+14
+15
+20
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+A forest is a large area where trees grow close
+together.
+Food is what people and animals eat.
+A cemetery is a place where dead peoples bodies
+or their ashes are buried.
+The shores or shore of a sea, lake, or wide river is
+the land along the edge of it.
+A bird is a creature with feathers and wings,
+females lay eggs, and most birds can fly.
+The coast is an area of land that is next to the sea.
+A furnace is a container or enclosed space in
+which a very hot fire is made, for example to
+melt metal, burn rubbish or produce steam.
+A crane is a large machine that moves heavy
+things by lifting them in the air.
+A hill is an area of land that is higher than the
+land that surrounds it.IEEE TRANSACTIONS ON KNOWLEDGE AND DATA ENGINEERING
+12
+TABLE 11
+Sentence Similarity from proposed methodology compared with human mean similarity from Li2006 (Continued from previous page)
+R&G
+Num-
+ber Sentence 1 Sentence 2 Mean Human
+Similarity 34 A car is a motor vehicle with room for a small
+number of passengers.
+A cemetery is a place where dead peoples bodies
+or their ashes are buried.
+Glass is a hard transparent substance that is used
+to make things such as windows and bottles. When you make a journey, you travel from one
+place to another.
+A mound of something is a large rounded pile of
+it.
+A jewel is a precious stone used to decorate
+valuable things that you wear, such as rings or
+necklaces.
+In ancient times, an oracle was a priest or
+priestess who made statements about future
+events or about the truth.
+An implement is a tool or other piece of
+equipment.
+A lad is a young man or boy. 0.0725 Proposed
+Algorithm
+Sentence
+Similarity
+0.02610
+0.0575 0.0842
+0.1075 0.2692
+0.1300 0.1000
+0.1850 0.1060
+0.1275 0.9615
+In legends and fairy stories, a wizard is a man
+who has magic powers.
+A sage is a person who is regarded as being very
+wise. 0.1525 0.1920
+0.2825 0.0452
+A crane is a large machine that moves heavy
+things by lifting them in the air.
+A cock is an adult male chicken. 0.0350 0.1660
+0.1625 0.1704
+Fruit or a fruit is something which grows on a
+tree or bush and which contains seeds or a stone
+covered by a substance that you can eat.
+A monk is a member of a male religious
+community that is usually separated from the
+outside world.
+If you describe a place or situation as a
+madhouse, you mean that it is full of confusion
+and noise.
+A stove is a piece of equipment which provides
+heat, either for cooking or for heating a room. 0.2425 0.1379
+0.0450 0.2780
+0.2150 0.1860
+0.3475 0.1613
+In legends and fairy stories, a wizard is a man
+who has magic powers.
+A mound of something is a large rounded pile of
+it.
+String is thin rope made of twisted threads, used
+for tying things together or tying up parcels.
+A tumbler is a drinking glass with straight sides. 0.3550 0.5399
+0.2925 0.2986
+0.4700 0.2530
+0.1375 0.3016
+A smile is the expression that you have on your
+face when you are pleased or amused, or when
+you are being friendly.
+A slave is someone who is the property of
+another person and has to work for that person. 0.4850 0.8419
+0.4825 0.8896
+A voyage is a long journey on a ship or in a
+spacecraft.
+Your signature is your name, written in your
+own characteristic way, often at the end of a
+document to indicate that you wrote the
+document or that you agree with what it says.
+The shores or shore of a sea, lake, or wide river is
+the land along the edge of it.
+Woodland is land with a lot of trees. 0.3600 0.7826
+0.4050 0.3146
+0.5875 0.9773
+0.6275 0.4770
+A tool is any instrument or simple piece of
+equipment that you hold in your hands and use
+to do a particular kind of work.
+A rooster is an adult male chicken.
+A lad is a young man or boy.
+A pillow is a rectangular cushion which you rest
+your head on when you are in bed. 0.5900 0.8919
+0.8625
+0.5800
+0.5225 0.8560
+0.8980
+0.9340
+A graveyard is an area of land, sometimes near a
+church, where dead people are buried.
+A car is a motor vehicle with room for a small
+number of passengers.
+Noon is 12 oclock in the middle of the day. 0.7725 1.0
+0.5575 0.7001
+0.9550 0.8726
+35
+36
+37 A magician is a person who entertains people by
+doing magic tricks.
+38 A crane is a large machine that moves heavy
+things by lifting them in the air.
+Your brother is a boy or a man who has the same
+parents as you.
+A sage is a person who is regarded as being very
+wise.
+In ancient times, an oracle was a priest or
+priestess who made statements about future
+events or about the truth.
+A bird is a creature with feathers and wings,
+females lay eggs, and most birds can fly.
+A bird is a creature with feathers and wings,
+females lay eggs, and most birds can fly.
+Food is what people and animals eat.
+39
+40
+41
+42
+43
+44
+45 Your brother is a boy or a man who has the same
+parents as you.
+46 An asylum is a psychiatric hospital.
+47 A furnace is a container or enclosed space in
+which a very hot fire is made, for example, to
+melt metal, burn rubbish, or produce steam.
+A magician is a person who entertains people by
+doing magic tricks.
+A hill is an area of land that is higher than the
+land that surrounds it.
+Cord is strong, thick string.
+48
+49
+50
+51
+52
+53
+54
+55
+Glass is a hard transparent substance that is used
+to make things such as windows and bottles.
+A grin is a broad smile.
+In former times, serfs were a class of people who
+had to work on a particular persons land and
+could not leave without that persons permission.
+When you make a journey, you travel from one
+place to another.
+An autograph is the signature of someone
+famous which is specially written for a fan to
+keep.
+56 The coast is an area of land that is next to the sea.
+57 A forest is a large area where trees grow close
+together.
+An implement is a tool or other pieces of
+equipment.
+58
+59
+60
+61
+63 A cock is an adult male chicken.
+A boy is a child who will grow up to be a man.
+A cushion is a fabric case filled with soft
+material, which you put on a seat to make it
+more comfortable.
+A cemetery is a place where dead peoples bodies
+or their ashes are buried.
+An automobile is a car.
+64 Midday is 12 oclock in the middle of the day.
+62IEEE TRANSACTIONS ON KNOWLEDGE AND DATA ENGINEERING
+13
+TABLE 12
+Sentence Similarity from proposed methodology compared with human mean similarity from Li2006 (Continued from previous page)
+R&G
+Num-
+ber Sentence 1 Sentence 2 Mean Human
+Similarity
+65 A gem is a jewel or stone that is used in jewellery. A jewel is a precious stone used to decorate
+valuable things that you wear, such as rings or
+necklaces. 0.6525
+this methodology is to achieve results as close as to the
+benchmark standard by Rubenstein and Goodenough [16].
+The definitions of the words are obtained from the Collins
+Cobuild dictionary. Our algorithm achieved good Pearson
+correlation coefficient of 0.8753695501 for word similarity
+which is cosiderably higher than the existing algorithms.
+Fig. 5 represents the results for 65 pairs against the R&G
+benchmark standard. Fig. 6 represents the linear regression
+against the standard. The linear regression shows that this
+algortihm outperforms other similar algorithms. Table 7
+shows the values of parameters for linear regression.
+5.1
+Sentence similarity
+Tables 10, 11 and 12 contain the mean human sentence
+similarity values from Pilot Short Text Semantic Similarity
+Benchmark Data Set by James O’Shea [26]. As Li [14] ex-
+plains, when a survey was conducted by 32 participants to
+establish a measure for semantic similarity, they were asked
+to mark the sentences, not the words. Hence, word similarity
+is compared with the R&G [16] whereas sentence similarity
+is compared with mean human similarity. Our algorithm’s
+sentence similarity achieved good Pearson correlation coef-
+ficient of 0.8794 with mean human similarity outperforming
+previous methods. Li [14] obtained correlation coefficient of
+0.816 and Islam [29] obtained correlation coefficient of 0.853.
+Out of 65 sentence pairs, 5 pairs were eliminated because of
+their definitions from Collins Cobuild dictionary [27]. The
+reasons and results are discussed in next section.
+6
+D ISCUSSION
+Our algorithm’s similarity measure achieved a good Pear-
+son correlation coefficient of 0.8753 with R&G word pairs
+[16]. This performance outperforms all the previous meth-
+ods. Table 8 represents the comparison of similarity from
+proposed method and Lee [28] with the R&G. Table 9
+depicts the comparison of algorithm similarity against Islam
+[29] and Li [14] for the 30 noun pairs and performs better.
+For sentence similarity, the pairs 17: coast-forest, 24: lad-
+wizard, 30: coast-hill, 33: hill-woodland and 39: brother-lad are
+not considered. The reason for this is, the definition of these
+word pairs have more than one common or synonymous
+words. Hence, the overall sentence similarity does not reflect
+the true sense of these word pairs as they are rated with
+low similarity in mean human ratings. For example, the
+definition of ‘lad’ is given as: ‘A lad is a young man or
+boy.’ and the definition of ‘wizard’ is: ‘In legends and fairy
+stories, a wizard is a man who has magic powers.’ Both
+sentences have similar or closely related words such as:
+‘man-man’, ‘boy-man’ and ‘lad-man’. Hence, these pairs
+Proposed
+Algorithm
+Sentence
+Similarity
+0.8536
+affect overall similarity measure more than the actual words
+compared ‘lad-wizard’.
+7
+C ONCLUSIONS
+This paper presented an approach to calculate the semantic
+similarity between two words, sentences or paragraphs.
+The algorithm initially disambiguates both the sentences
+and tags them in their parts of speeches. The disambigua-
+tion approach ensures the right meaning of the word for
+comparison. The similarity between words is calculated
+based on a previously established edge-based approach. The
+information content from a corpus can be used to influence
+the similarity in particular domain. Semantic vectors con-
+taining similarities between words are formed for sentences
+and further used for sentence similarity calculation. Word
+order vectors are also formed to calculate the impact of the
+syntactic structure of the sentences. Since word order affects
+less on the overall similarity than that of semantic similarity,
+word order similarity is weighted to a smaller extent. The
+methodology has been tested on previously established data
+sets which contain standard results as well as mean human
+results. Our algorithm achieved good Pearson correlation
+coefficient of 0.8753 for word similarity concerning the
+bechmark standard and 0.8794 for sentence similarity with
+respect to mean human similarity.
+Future work includes extending the domain of algorithm
+to analyze Learning Objectives from Course Descriptions,
+incorporating the algorithm with Bloom’s taxonomy will
+also be considered. Analyzing Learning Objectives requires
+ontologies and relationship between words belonging to the
+particular field.
+A CKNOWLEDGMENTS
+We would like to acknowledge the financial support pro-
+vided by ONCAT(Ontario Council on Articulation and
+Transfer)through Project Number- 2017-17-LU,without their
+support this research would have not been possible. We
+are also grateful to Salimur Choudhury for his insight on
+different aspects of this project; datalab.science team for
+reviewing and proofreading the paper.
+R EFERENCES
+[1]
+[2]
+D. Lin et al., “An information-theoretic definition of similarity.” in
+Icml, vol. 98, no. 1998, 1998, pp. 296–304.
+A. Freitas, J. Oliveira, S. ORiain, E. Curry, and J. Pereira da Silva,
+“Querying linked data using semantic relatedness: a vocabulary
+independent approach,” Natural Language Processing and Informa-
+tion Systems, pp. 40–51, 2011.IEEE TRANSACTIONS ON KNOWLEDGE AND DATA ENGINEERING
+[3]
+[4]
+[5]
+[6]
+[7]
+[8]
+[9]
+[10]
+[11]
+[12]
+[13]
+[14]
+[15]
+[16]
+[17]
+[18]
+[19]
+[20]
+[21]
+[22]
+[23]
+[24]
+[25]
+[26]
+V. Abhishek and K. Hosanagar, “Keyword generation for search
+engine advertising using semantic similarity between terms,” in
+Proceedings of the ninth international conference on Electronic com-
+merce. ACM, 2007, pp. 89–94.
+C. Pesquita, D. Faria, A. O. Falcao, P. Lord, and F. M. Couto,
+“Semantic similarity in biomedical ontologies,” PLoS computational
+biology, vol. 5, no. 7, p. e1000443, 2009.
+P. W. Lord, R. D. Stevens, A. Brass, and C. A. Goble, “Investigating
+semantic similarity measures across the gene ontology: the rela-
+tionship between sequence and annotation,” Bioinformatics, vol. 19,
+no. 10, pp. 1275–1283, 2003.
+T. Pedersen, S. V. Pakhomov, S. Patwardhan, and C. G. Chute,
+“Measures of semantic similarity and relatedness in the biomed-
+ical domain,” Journal of biomedical informatics, vol. 40, no. 3, pp.
+288–299, 2007.
+G. Varelas, E. Voutsakis, P. Raftopoulou, E. G. Petrakis, and E. E.
+Milios, “Semantic similarity methods in wordnet and their appli-
+cation to information retrieval on the web,” in Proceedings of the
+7th annual ACM international workshop on Web information and data
+management. ACM, 2005, pp. 10–16.
+G. Erkan and D. R. Radev, “Lexrank: Graph-based lexical cen-
+trality as salience in text summarization,” Journal of Artificial
+Intelligence Research, vol. 22, pp. 457–479, 2004.
+Y. Ko, J. Park, and J. Seo, “Improving text categorization using
+the importance of sentences,” Information processing & management,
+vol. 40, no. 1, pp. 65–79, 2004.
+C. Fellbaum, WordNet. Wiley Online Library, 1998.
+A. D. Baddeley, “Short-term memory for word sequences as a
+function of acoustic, semantic and formal similarity,” The Quarterly
+Journal of Experimental Psychology, vol. 18, no. 4, pp. 362–365, 1966.
+P. Resnik et al., “Semantic similarity in a taxonomy: An
+information-based measure and its application to problems of
+ambiguity in natural language,” J. Artif. Intell. Res.(JAIR), vol. 11,
+pp. 95–130, 1999.
+G. A. Miller and W. G. Charles, “Contextual correlates of semantic
+similarity,” Language and cognitive processes, vol. 6, no. 1, pp. 1–28,
+1991.
+Y. Li, D. McLean, Z. A. Bandar, J. D. O’shea, and K. Crockett,
+“Sentence similarity based on semantic nets and corpus statistics,”
+IEEE transactions on knowledge and data engineering, vol. 18, no. 8,
+pp. 1138–1150, 2006.
+J. J. Jiang and D. W. Conrath, “Semantic similarity based on corpus
+statistics and lexical taxonomy,” arXiv preprint cmp-lg/9709008,
+1997.
+H. Rubenstein and J. B. Goodenough, “Contextual correlates of
+synonymy,” Communications of the ACM, vol. 8, no. 10, pp. 627–
+633, 1965.
+C. T. Meadow, Text information retrieval systems. Academic Press,
+Inc., 1992.
+Y. Matsuo and M. Ishizuka, “Keyword extraction from a single
+document using word co-occurrence statistical information,” In-
+ternational Journal on Artificial Intelligence Tools, vol. 13, no. 01, pp.
+157–169, 2004.
+D. Bollegala, Y. Matsuo, and M. Ishizuka, “Measuring semantic
+similarity between words using web search engines.” www, vol. 7,
+pp. 757–766, 2007.
+R. L. Cilibrasi and P. M. Vitanyi, “The google similarity distance,”
+IEEE Transactions on knowledge and data engineering, vol. 19, no. 3,
+2007.
+G. A. Miller, “Wordnet: a lexical database for english,” Communi-
+cations of the ACM, vol. 38, no. 11, pp. 39–41, 1995.
+S. Bird, “Nltk: the natural language toolkit,” in Proceedings of the
+COLING/ACL on Interactive presentation sessions. Association for
+Computational Linguistics, 2006, pp. 69–72.
+M. P. Marcus, M. A. Marcinkiewicz, and B. Santorini, “Building a
+large annotated corpus of english: The penn treebank,” Computa-
+tional linguistics, vol. 19, no. 2, pp. 313–330, 1993.
+T. Pedersen, S. Banerjee, and S. Patwardhan, “Maximizing seman-
+tic relatedness to perform word sense disambiguation,” University
+of Minnesota supercomputing institute research report UMSI, vol. 25,
+p. 2005, 2005.
+L. Tan, “Pywsd: Python implementations of word
+sense
+disambiguation
+(wsd)
+technologies
+[software],”
+https://github.com/alvations/pywsd, 2014.
+J. O’Shea, Z. Bandar, K. Crockett, and D. McLean, “Pilot short text
+semantic similarity benchmark data set: Full listing and descrip-
+tion,” Computing, 2008.
+14
+[27] J. M. Sinclair, Looking up: An account of the COBUILD project in
+lexical computing and the development of the Collins COBUILD English
+language dictionary. Collins Elt, 1987.
+[28] M. C. Lee, J. W. Chang, and T. C. Hsieh, “A grammar-based
+semantic similarity algorithm for natural language sentences,” The
+Scientific World Journal, vol. 2014, 2014.
+[29] A. Islam and D. Inkpen, “Semantic text similarity using corpus-
+based word similarity and string similarity,” ACM Transactions on
+Knowledge Discovery from Data (TKDD), vol. 2, no. 2, p. 10, 2008.
+Atish Pawar Atish received B.E. degree in com-
+puter science and engineering with distinction
+from Walchand Institute of Technology, India in
+2014. He worked for Infosys Technologies from
+2014 to 2016. He is currently a graduate student
+at Lakehead University, Canada. His research
+interests include machine learning, natural lan-
+guage processing, and artificial intelligence. He
+is a research assistant at DataScience lab at
+Lakehead University.
+Vijay Mago Dr. Vijay. Mago is an Assistant
+Professor in the Department of Computer Sci-
+ence at Lakehead University in Ontario, where
+he teaches and conducts research in areas in-
+cluding decision making in multi-agent environ-
+ments, probabilistic networks, neural networks,
+and fuzzy logic-based expert systems. Recently,
+he has diversified his research to include natural
+Language Processing, big data and cloud com-
+puting. Dr. Mago received his Ph.D. in Computer
+Science from Panjab University, India in 2010.
+In 2011 he joined the Modelling of Complex Social Systems program
+at the IRMACS Centre of Simon Fraser University before moving on
+to stints at Fairleigh Dickinson University, University of Memphis and
+Troy University. He has served on the program committees of many
+international conferences and workshops. Dr. Mago has published ex-
+tensively on new methodologies based on soft computing and artificial
+intelligent techniques to tackle complex systemic problems such as
+homelessness, obesity, and crime. He currently serves as an associate
+editor for BMC Medical Informatics and Decision Making and as co-
+editor for the Journal of Intelligent Systems.

@@ -4,7 +4,7 @@ import java.util.Scanner;
 import java.util.Arrays;
 
 public class Testing2 {
-	public static final String filepath = "./testing.txt";
+	public static final String filepath = "./sample2.txt";
 
 	public static void main(String[] args) {
 		int chars[] = readFile();
@@ -30,7 +30,7 @@ public class Testing2 {
 					int letter = (int)(line.charAt(i) - 'A');
 					if(letter > -1 && letter < ret.length){
 						ret[letter]++;
-					} 
+					}
 				}
 				letterCount += line.length();
 			}
