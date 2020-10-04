@@ -15,27 +15,32 @@ DES.java: 	class implementing the DES cipher. It contains a self-test main
 - `java DES`
 - `java DES level`
 - `java DES key plain cipher level`
-- DEScalc.java:	class implementing the calculator GUI (as an applet)
+
+DEScalc.java:	class implementing the calculator GUI (as an applet)
 		  		and main program for when run as an application.
 		  		Can be run either as an applet (using DEScalc.html),
 		  		as a GUI by running as:
-			      	- `java -jar DEScalc.jar [-t level]`
+- `java -jar DEScalc.jar [-t level]`
+
 		  		or in command-line to generate en/decrypt traces as:
-			      	- `java -jar DEScalc.jar [-e|-d] [-tlevel] hexkey hexdata`
-- GenDES.java:	a program to generate random DES (key,plain,cipher)
+
+- `java -jar DEScalc.jar [-e|-d] [-tlevel] hexkey hexdata`
+
+GenDES.java:	a program to generate random DES (key,plain,cipher)
 		  		triples. eg for use in student labs.
 		  		To generate n triples run as:
-		    	  	- `java GenDES n`
-- Util.java:	utility routines for converting and displaying binary data
-- index.html:	overview HTML file describing this program
-- DEScalc.html:	HTML file to run DEScalc as an applet.
-- check_triples:	Unix shellscript to read and verify a file of test triples
-- nist-triples:	a set of test triples to validate the implementation
-- manifest.txt:	JAR manifest file specifying the main class for jar execution
-- DEScalc:		Unix shell script to run DEScalc (wraps java command)
-- Makefile:		Unix makefile to compile the code and create the jar 
+- `java GenDES n`
+
+Util.java:	utility routines for converting and displaying binary data
+index.html:	overview HTML file describing this program
+DEScalc.html:	HTML file to run DEScalc as an applet.
+check_triples:	Unix shellscript to read and verify a file of test triples
+nist-triples:	a set of test triples to validate the implementation
+manifest.txt:	JAR manifest file specifying the main class for jar execution
+DEScalc:		Unix shell script to run DEScalc (wraps java command)
+Makefile:		Unix makefile to compile the code and create the jar 
 				file using the JDK utilities
-- README:		this README file
+README:		this README file
 
 You can build the class files and main program jar file using:
 	make
