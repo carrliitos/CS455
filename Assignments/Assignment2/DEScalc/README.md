@@ -7,11 +7,14 @@ of the calculations performed, with varying degrees of detail.
 
 This source jarfile contains the source distribution for this program.
 It contains the following files:
-- DES.java: 
-	class implementing the DES cipher. It contains a self-test main routine, which can test using an internally coded triple, tracing at the specified level, or with an explicitly sprecified triple, by invoking using one of the following forms:
-    	- `java DES`
-    	- `java DES level`
-    	- `java DES key plain cipher level`
+
+DES.java: 	class implementing the DES cipher. It contains a self-test main 
+			routine, which can test using an internally coded triple, tracing 
+			at the specified level, or with an explicitly sprecified triple, 
+			by invoking using one of the following forms:
+    			`java DES`
+    			`java DES level`
+    			`java DES key plain cipher level`
 - DEScalc.java:	class implementing the calculator GUI (as an applet)
 		  		and main program for when run as an application.
 		  		Can be run either as an applet (using DEScalc.html),
