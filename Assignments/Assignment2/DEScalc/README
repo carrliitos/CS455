@@ -35,7 +35,7 @@ DEScalc.html	- HTML file to run DEScalc as an applet.
 check_triples	- Unix shellscript to read and verify a file of test triples
 nist-triples	- a set of test triples to validate the implementation
 manifest.txt	- JAR manifest file specifying the main class for jar execution
-DEScalc	- Unix shell script to run DEScalc (wraps java command)
+DEScalc			- Unix shell script to run DEScalc (wraps java command)
 Makefile	- Unix makefile to compile the code and create the jar
 		  file using the JDK utilities
 README		- this README file
