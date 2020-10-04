@@ -12,20 +12,20 @@ It contains the following files:
 		  		using an internally coded triple, tracing at the 
 		  		specified level, or with an explicitly sprecified triple,
 		  		by invoking using one of the following forms:
-		    	- `java DES`
-		    	- `java DES level`
-		    	- `java DES key plain cipher level`
+			    	- `java DES`
+			    	- `java DES level`
+			    	- `java DES key plain cipher level`
 - DEScalc.java:	class implementing the calculator GUI (as an applet)
 		  		and main program for when run as an application.
 		  		Can be run either as an applet (using DEScalc.html),
 		  		as a GUI by running as:
-		      	- `java -jar DEScalc.jar [-t level]`
+			      	- `java -jar DEScalc.jar [-t level]`
 		  		or in command-line to generate en/decrypt traces as:
-		      	- `java -jar DEScalc.jar [-e|-d] [-tlevel] hexkey hexdata`
+			      	- `java -jar DEScalc.jar [-e|-d] [-tlevel] hexkey hexdata`
 - GenDES.java:	a program to generate random DES (key,plain,cipher)
 		  		triples. eg for use in student labs.
 		  		To generate n triples run as:
-		      	- `java GenDES n`
+		    	  	- `java GenDES n`
 - Util.java:	utility routines for converting and displaying binary data
 - index.html:	overview HTML file describing this program
 - DEScalc.html:	HTML file to run DEScalc as an applet.
