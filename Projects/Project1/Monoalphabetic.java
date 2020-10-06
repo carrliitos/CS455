@@ -21,14 +21,14 @@ import java.util.Arrays;
 
 public class Monoalphabetic {
 	public static void main(String[] args) {
-		String filepath = "Benzon S.txt";
+		String filepath = "QUIZ_CIPHER.txt";
 
 		System.out.println("Calculating Letter Frequencies...");
 		int chars[] = letterFrequency(filepath);
 		if(chars == null) return;
 
 		try {
-			File f = new File("./letterFrequency.txt");
+			File f = new File("./LETTERFREQUENCY.txt");
 			FileWriter fWriter = new FileWriter(f);
 
 			fWriter.write("LETTER\t| FREQUENCY\n");
@@ -86,7 +86,7 @@ public class Monoalphabetic {
 			FileReader fReader = new FileReader(file);
 			BufferedReader bReader = new BufferedReader(fReader);
 
-			File f = new File("./plainText.txt");
+			File f = new File("./QUIZTEXT.txt");
 			FileWriter fWriter = new FileWriter(f);
 
 			int c = 0;
@@ -100,7 +100,8 @@ public class Monoalphabetic {
 				cipherText += chars.get(i);
 			}
 
-			String KEY = "UIOYKLXHVBSFWJGNRDPECZMATQ";
+			// String KEY = "UIOYKLXHVBSFWJGNRDPECZMATQ";
+			String KEY = "XOHCYSKJWTMVINLDUBPZQAFGRE";
 			String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 			int i, j;
