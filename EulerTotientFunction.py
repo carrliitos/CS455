@@ -23,5 +23,6 @@ def main():
 	val = int(val)
 	print("phi(", val, ") = ", phi(val))
 
-if __name__ == '__main__':
-	main()
+if __name__ == '__main__': main()
+
+
