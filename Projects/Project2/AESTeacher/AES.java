@@ -33,10 +33,10 @@ public class AES {
 	 */
 	private void Calculate() {
 		if (this.mode == 'e') {
-			AES_Encryption encryption = new AES_Encryption(this.key, this.context,this.inputFileName);
+			AES_Encryption encryption = new AES_Encryption(this.key, this.context, this.inputFileName);
 			encryption.encrypt();
 		} else if (this.mode == 'd') {
-			AES_Decryption decryption = new AES_Decryption(this.key, this.context,this.inputFileName);
+			AES_Decryption decryption = new AES_Decryption(this.key, this.context, this.inputFileName);
 			decryption.decrypt();
 		}
 	}
