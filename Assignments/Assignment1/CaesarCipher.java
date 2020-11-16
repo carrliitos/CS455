@@ -7,8 +7,8 @@ public class CaesarCipher {
 	private static final int ALPHA_SIZE = 26;
 	private static final String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	public static void main(String[] args) {
-		String text1 = "TUZBKXEYKIAXK";
-		String text2 = "TSJLCPYZJCRMZPSRCDMPACYRRYAIQ";
+		String text1 = "HSNSRP";
+		String text2 = "ZICVTWQNG";
 
 		System.out.printf("Text 1: %s\n", text1);
 		System.out.printf("Possible combinations: \n");

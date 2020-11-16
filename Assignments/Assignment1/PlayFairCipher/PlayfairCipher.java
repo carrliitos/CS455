@@ -14,7 +14,7 @@ import java.nio.file.Paths;
 
 public class PlayfairCipher {
 	public static final String ALPHABET[] = {"A","B","C","D","E","F","G","H",
-											"J","K","L","M","N","O","P","Q","R",
+											"I","K","L","M","N","O","P","Q","R",
 											"S","T","U","V","W","X","Y","Z"};
 	
 	public static void main(String[] args) {
@@ -66,7 +66,7 @@ public class PlayfairCipher {
 
 	public static String[][] generateTableau(String key, HashMap<String, Letter> letters) {
 		// replace I with J
-		key = key.replace("I", "J");
+		key = key.replace("J", "I");
 		// create temp for removing any duplicates
 		ArrayList<String> temp = new ArrayList<>();
 
@@ -120,7 +120,7 @@ public class PlayfairCipher {
 	}
 
 	public static String pair(String text) {
-		text = text.replace("I", "J");
+		text = text.replace("J", "I");
 		int textLength = text.length();
 		StringBuilder pairedText = new StringBuilder(text);
 		for(int i = 0; i < textLength - 1; i += 2) {
