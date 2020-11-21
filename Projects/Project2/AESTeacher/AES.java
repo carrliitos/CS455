@@ -116,7 +116,7 @@ public class AES {
 		if (!args[0].equals("e") && !args[0].equals("d")) {
 			ErrorHandler("Incorrect mode ! \n('d' for Decryption, 'e' for Encryption)");
 		}
-		// Ok mode key file text file
+
 		AES aes = new AES(args[0].charAt(0), args[1], args[2]);
 		aes.Calculate();
 	}
