@@ -1,5 +1,5 @@
 # AES-Advanced-Encryption-Standard
-  A project for UVIC Seng360
+  Project 2 for CS455
 
 # Usage:  
     1.Compile: javac AES.java or javac *.java
