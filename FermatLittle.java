@@ -23,9 +23,10 @@ public class FermatLittle {
 		for(int i = 0; i < numberOfIters; i++) {
 			// construct a coprime, a, for testing the primality of n
 			BigInteger a = constructRandomCoprime(n);
-			// perform modular exponentiation on a
-			// Fermat's Theorem states that if a^(n - 1) = 1(mod n), 
-			//  BigInteger n is (likely) prime
+			/** perform modular exponentiation on a
+			 *  Fermat's Theorem states that if a^(n - 1) = 1(mod n), 
+			 *  BigInteger n is (likely) prime
+			 */
 			a = a.modPow(n.subtract(BigInteger.ONE), n);
 
 			// if a^(n - 1) != 1(mod n), BigInteger n is composite
