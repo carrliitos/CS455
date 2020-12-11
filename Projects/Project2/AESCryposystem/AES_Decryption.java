@@ -1,3 +1,7 @@
+/**
+ * @author Benzon Carlitos Salazar
+ */
+
 import java.io.PrintWriter;
 import java.math.BigInteger;
 import java.util.ArrayList;

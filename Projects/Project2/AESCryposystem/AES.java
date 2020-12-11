@@ -1,3 +1,7 @@
+/**
+ * @author Benzon Carlitos Salazar
+ */
+
 import java.io.File;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
